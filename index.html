@@ -59,6 +59,24 @@
             background-color: #333;
             color: white;
         }
+        .auth-form {
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            width: 300px;
+            margin: 20px auto;
+        }
+        .auth-form input {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        .auth-form button {
+            width: 100%;
+        }
     </style>
 </head>
 <body>
@@ -70,7 +88,31 @@
         <a href="#products">منتجاتي</a>
         <a href="#about">من أنا</a>
         <a href="#contact">اتصل بي</a>
+        <a href="#login">تسجيل الدخول</a>
+        <a href="#register">إنشاء حساب</a>
     </nav>
+
+    <!-- قسم تسجيل الدخول -->
+    <section id="login" class="auth-form">
+        <h2>تسجيل الدخول</h2>
+        <form id="loginForm">
+            <input type="email" id="loginEmail" placeholder="البريد الإلكتروني" required>
+            <input type="password" id="loginPassword" placeholder="كلمة المرور" required>
+            <button type="submit">تسجيل الدخول</button>
+        </form>
+    </section>
+
+    <!-- قسم إنشاء حساب -->
+    <section id="register" class="auth-form">
+        <h2>إنشاء حساب</h2>
+        <form id="registerForm">
+            <input type="text" id="registerName" placeholder="الاسم الكامل" required>
+            <input type="email" id="registerEmail" placeholder="البريد الإلكتروني" required>
+            <input type="password" id="registerPassword" placeholder="كلمة المرور" required>
+            <button type="submit">إنشاء حساب</button>
+        </form>
+    </section>
+
     <section id="products">
         <h2>منتجاتي</h2>
         <div class="product">
@@ -103,6 +145,7 @@
     <footer>
         <p>© 2025 أفق - Ofok. جميع الحقوق محفوظة.</p>
     </footer>
+
     <!-- إضافة Stripe JS -->
     <script src="https://js.stripe.com/v3/"></script>
     <script>
@@ -113,6 +156,46 @@
                 sessionId: 'YOUR_SESSION_ID'
             });
         });
+
+        // معالجة تسجيل الدخول
+        document.getElementById('loginForm').addEventListener('submit', async function(event) {
+            event.preventDefault();
+            const email = document.getElementById('loginEmail').value;
+            const password = document.getElementById('loginPassword').value;
+
+            try {
+                const response = await fetch('http://localhost:5000/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email, password }),
+                });
+                const result = await response.text();
+                alert(result);
+            } catch (error) {
+                alert('Error logging in');
+            }
+        });
+
+        // معالجة إنشاء حساب
+        document.getElementById('registerForm').addEventListener('submit', async function(event) {
+            event.preventDefault();
+            const name = document.getElementById('registerName').value;
+            const email = document.getElementById('registerEmail').value;
+            const password = document.getElementById('registerPassword').value;
+
+            try {
+                const response = await fetch('http://localhost:5000/register', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ name, email, password }),
+                });
+                const result = await response.text();
+                alert(result);
+            } catch (error) {
+                alert('Error registering user');
+            }
+        });
     </script>
+    <script src="script.js"></script>
 </body>
 </html>
